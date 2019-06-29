@@ -1,12 +1,12 @@
 --Records all songs from Spotify playlist/album.
--- Make sure there are no duplicate songs in the playlist/album or else it will stop recording.
 --Only useful for Spotify premium users.
---Current optimal before delay at 0.1, can change with future Spotify updates.
---Current optimal after delay at 1.2, can change with future Spotify updates.
 
 --Must have a Audio Hijack Pro session named "Spotify" connected to the Spotify app.
 --Must be hijacking within the session.
---Must play from an album or playlist with multiple songs when recording.
+--Must be no duplicate songs in the playlist/album or else it will stop recording.
+
+--Current optimal before delay at 0.1, can change with future Spotify updates.
+--Current optimal after delay at 1.2, can change with future Spotify updates.
 
 global track_number
 global track_name
