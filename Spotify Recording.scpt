@@ -68,7 +68,7 @@ on start()
 		
 		delay 2
 		
-		-- Changed from "until player state is not playing" since initially track is reset (paused) and that was causing issues.
+		--Changed from "until player state is not playing", as this was causing issues.
 		repeat while track_name is equal to (name of current track)
 			delay 0
 		end repeat
@@ -85,7 +85,6 @@ end start
 my setup()
 
 repeat while track_list does not contain track_name
-	
 	copy track_name to end of track_list
 	
 	set output_folder to "/Users/krieger/Music/Audio Hijack/" & "[" & track_artist & "] [XXXX] " & track_album & " [320 kbps]"
@@ -97,5 +96,4 @@ repeat while track_list does not contain track_name
 	delay 2
 	
 	my setup()
-	
 end repeat
