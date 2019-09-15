@@ -15,7 +15,7 @@ This is what the Audio Hijack Pro application should look like after starting th
 The script is able to capture audio quality in MP3 320 kbps (CBR) as can be seen in the spectral below. This is the highest audio quality for MP3 files.
 
 <p align="center">
-  <img src="https://i.imgur.com/DJjDcSd.png" width="616" height="409">
+  <img src="https://i.imgur.com/t0SpAzq.png" width="616" height="415">
 </p>
 
 MP3 320kbps (CBR) has a frequency cut-off at 20.5 kHz.
