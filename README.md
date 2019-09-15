@@ -4,7 +4,7 @@ This AppleScript script allows the user to record/download songs from Spotify on
 
 
 <p align="center">
-  <img src="https://i.imgur.com/vMpd7E6.png">
+  <img src="https://i.imgur.com/vMpd7E6.png" width="694" height="632">
 </p>
 
 <p align="center">
