@@ -4,7 +4,8 @@ This AppleScript script allows the user to record/download songs from Spotify on
 
 Before starting script:
 * Change destination folder path (line xx) to preferred directory.
-* Make sure Spotify is playing from album or playlist with repeat enabled.
+* Hijack Spotify within Audio Hijack Pro.
+* Make sure Spotify is playing from album/playlist with repeat enabled.
 
 This is what the Audio Hijack Pro application should look like after starting the script:
 
@@ -12,10 +13,8 @@ This is what the Audio Hijack Pro application should look like after starting th
   <img src="https://i.imgur.com/pL4lfih.png" width="616" height="399">
 </p>
 
-The script is able to capture audio quality in MP3 320 kbps (CBR) as can be seen in the spectral below. This is the highest audio quality for MP3 files.
+The script is able to capture audio quality in MP3 320 kbps (CBR) as can be seen in the spectral below. This is the highest audio quality for MP3 files. MP3 320kbps (CBR) has a frequency cut-off at 20.5 kHz which is consistent with the spectral.
 
 <p align="center">
   <img src="https://i.imgur.com/t0SpAzq.png" width="616" height="415">
 </p>
-
-MP3 320kbps (CBR) has a frequency cut-off at 20.5 kHz.
