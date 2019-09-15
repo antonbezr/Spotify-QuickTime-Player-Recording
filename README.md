@@ -4,7 +4,7 @@ This AppleScript script allows the user to record/download songs from Spotify on
 
 Before starting script:
 * Change destination folder path (line xx) to preferred directory.
-* Hijack Spotify within Audio Hijack Pro.
+* Hijack the Spotify session within Audio Hijack Pro.
 * Make sure Spotify is playing from album/playlist with repeat enabled.
 
 This is what the Audio Hijack Pro application should look like after starting the script:
