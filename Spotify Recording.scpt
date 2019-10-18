@@ -87,7 +87,7 @@ my setup()
 repeat while track_list does not contain track_name
 	copy track_name to end of track_list
 	
-	set output_folder to "/Users/krieger/Music/Audio Hijack/" & "[" & track_artist & "] [XXXX] " & track_album & " [320 kbps]"
+	set output_folder to "~/Music/Audio Hijack/" & "[" & track_artist & "] [XXXX] " & track_album & " [320 kbps]"
 	set folder_path to POSIX path of output_folder
 	
 	my update()
