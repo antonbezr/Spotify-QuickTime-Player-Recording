@@ -48,6 +48,7 @@ on update()
 			set track number tag to track_number
 			set title tag to track_name
 			set artist tag to track_artist
+			set album tag to track_album
 			--No year tag implemented currently
 			
 			--Set presets for audio quality settings
