@@ -1,17 +1,12 @@
 --Records all songs from Spotify playlist/album.
 --Only useful for Spotify premium users.
-
---Must have a Audio Hijack Pro session named "Spotify" connected to the Spotify app.
---Must be hijacking within the session.
 --Must be no duplicate songs in the playlist/album or else it will stop recording.
-
---Current optimal before delay at 0.1, can change with future Spotify updates.
---Current optimal after delay at 1.2, can change with future Spotify updates.
 
 global track_number
 global track_name
 global track_artist
 global track_album
+set track_name to ""
 
 global the_session
 global output_folder
@@ -20,81 +15,68 @@ global folder_path
 global track_list
 set track_list to {}
 
-property file_extension : ".mp3"
+--Current optimal after song delay at 1.2 seconds
+global after_delay
+set after_delay to 1.2
 
-on setup()
+-- If recording high quality set to ".m4a"
+-- If recording maximum quality set to ".aifc"
+property file_extension : ".m4a"
+
+on reset()
 	tell application "Spotify"
 		if player state is playing then pause
+		set player position to 0
+		set repeating to true
+		set shuffling to false
 		set track_number to (track number of current track)
 		set track_name to (name of current track)
 		set track_artist to (artist of current track)
 		set track_album to (album of current track)
 	end tell
-end setup
+end reset
 
-on update()
-	--Activates the_session and sets up the preferences. Starts recording.
-	tell application "Audio Hijack Pro"
+on rec()
+	set saveFolder to "[" & track_artist & "]" & " [XXXX] " & track_album & " [320 kbps]"
+	if track_number < 10 then
+		set track_number to "0" & track_number
+	end if
+	set saveName to "[" & track_number & "] " & track_name & file_extension
+	
+	do shell script "mkdir -p " & "~/Music/QuickTime/\"" & saveFolder & "\""
+	set filePath to "MAINFRAME:Users:anton:Music:QuickTime:" & saveFolder & ":" & saveName
+	set f to a reference to file filePath
+	
+	tell application "QuickTime Player"
 		activate
-		set the_session to (first item of (every session whose name is "Spotify"))
-		tell the_session
-			set output folder to output_folder
-			if track_number is less than 10 then
-				set output name format to "[0" & track_number & "] " & track_name
-			else
-				set output name format to "[" & track_number & "] " & track_name
-			end if
-			
-			set track number tag to track_number
-			set title tag to track_name
-			set artist tag to track_artist
-			set album tag to track_album
-			--No year tag implemented currently
-			
-			--Set presets for audio quality settings
-			set recording format to {encoding:MP3, bit rate:320, channels:Stereo, style:CBR}
-		end tell
-		if hijacked of the_session is false then start hijacking the_session
-		delay 0.1
-		start recording the_session
-	end tell
-end update
-
-
-on start()
-	--Plays the song. Stops recording on change of the current track name.
-	tell application "Spotify"
-		set player position to 0
-		play
-		
-		delay 2
-		
-		--Changed from "until player state is not playing", as this was causing issues.
-		repeat while track_name is equal to (name of current track)
-			delay 0
-		end repeat
-		
-		tell application "Audio Hijack Pro"
-			delay 1.2
-			stop recording the_session
+		set new_audio_recording to new audio recording
+		tell new_audio_recording
+			start
+			tell application "Spotify"
+				play
+				repeat while track_name is equal to (name of current track)
+					delay 0
+				end repeat
+			end tell
+			delay after_delay
+			pause
+			save new_audio_recording in f
+			stop
+			close new_audio_recording
 		end tell
 	end tell
-end start
+end rec
 
 ------------------------- MAIN LOOP -------------------------
 
-my setup()
-
 repeat while track_list does not contain track_name
+	do shell script "/usr/local/bin/SwitchAudioSource -t input -s 'Built-in Microphone'"
+	do shell script "/usr/local/bin/SwitchAudioSource -t output -s 'Built-in Output'"
 	copy track_name to end of track_list
-	
-	set output_folder to "~/Music/[" & track_artist & "] [XXXX] " & track_album & " [XXX kbps]"
-	set folder_path to POSIX path of output_folder
-	
-	my update()
-	my start()
-	
-	delay 2
-	
-	my setup()
+	reset()
+	delay 5
+	do shell script "/usr/local/bin/SwitchAudioSource -t input -s 'Soundflower (64ch)'"
+	do shell script "/usr/local/bin/SwitchAudioSource -t output -s 'Soundflower (64ch)'"
+	do shell script "osascript -e \"set volume output volume 100\""
+	rec()
 end repeat
