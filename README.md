@@ -12,5 +12,5 @@ Before starting script:
 The script is able to capture audio quality in Stereo MP3 320 kbps (CBR) as can be seen in the spectral below. This is the highest audio quality for MP3 files. MP3 320kbps has a frequency cut-off at 20.5 kHz which is consistent with the spectral.
 
 <p align="center">
-  <img src="https://i.imgur.com/t0SpAzq.png" width="616" height="415">
+  <img src="https://i.imgur.com/t0SpAzq.png" width="50%" height="50%">
 </p>
