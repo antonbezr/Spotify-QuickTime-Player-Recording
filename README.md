@@ -1,5 +1,7 @@
 # Spotify Audio Hijack Recording
 
+THIS SCRIPT WILL NOT WORK FOR MAC OS VERSIONS 10.14 AND UP.
+
 This AppleScript script allows the user to record/download songs from Spotify on any Mac OS device. An additional application (Audio Hijack Pro v.2) is needed in order to utilize this script. Newer versions of Audio Hijack Pro will not work with this script.
 
 Before starting script:
