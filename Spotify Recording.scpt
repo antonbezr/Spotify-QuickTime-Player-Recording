@@ -6,7 +6,6 @@ global track_number
 global track_name
 global track_artist
 global track_album
-set track_name to ""
 
 global the_session
 global output_folder
@@ -68,15 +67,19 @@ on rec()
 end rec
 
 ------------------------- MAIN LOOP -------------------------
+reset()
 
 repeat while track_list does not contain track_name
+	copy track_name to end of track_list
 	do shell script "/usr/local/bin/SwitchAudioSource -t input -s 'Built-in Microphone'"
 	do shell script "/usr/local/bin/SwitchAudioSource -t output -s 'Built-in Output'"
-	copy track_name to end of track_list
-	reset()
-	delay 5
+	delay 3
 	do shell script "/usr/local/bin/SwitchAudioSource -t input -s 'Soundflower (2ch)'"
 	do shell script "/usr/local/bin/SwitchAudioSource -t output -s 'Soundflower (2ch)'"
 	do shell script "osascript -e \"set volume output volume 100\""
 	rec()
+	reset()
 end repeat
+
+do shell script "/usr/local/bin/SwitchAudioSource -t input -s 'Built-in Microphone'"
+do shell script "/usr/local/bin/SwitchAudioSource -t output -s 'Built-in Output'"
