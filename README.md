@@ -1,6 +1,6 @@
 # Spotify QuickTime Player Recording
 
-This AppleScript script allows the user to record/download songs from Spotify on any Mac OS device using QuickTime Player.
+This AppleScript script allows the user to record songs from Spotify on any Mac OS device using QuickTime Player.
 
 Dependencies for this script:
 * Soundflower - https://github.com/mattingalls/Soundflower
