@@ -21,7 +21,7 @@ set after_delay to 1.2
 
 -- If recording high quality set to ".m4a"
 -- If recording maximum quality set to ".aifc"
-property file_extension : ".m4a"
+property file_extension : ".aifc"
 
 on reset()
 	tell application "Spotify"
@@ -75,8 +75,8 @@ repeat while track_list does not contain track_name
 	copy track_name to end of track_list
 	reset()
 	delay 5
-	do shell script "/usr/local/bin/SwitchAudioSource -t input -s 'Soundflower (64ch)'"
-	do shell script "/usr/local/bin/SwitchAudioSource -t output -s 'Soundflower (64ch)'"
+	do shell script "/usr/local/bin/SwitchAudioSource -t input -s 'Soundflower (2ch)'"
+	do shell script "/usr/local/bin/SwitchAudioSource -t output -s 'Soundflower (2ch)'"
 	do shell script "osascript -e \"set volume output volume 100\""
 	rec()
 end repeat
