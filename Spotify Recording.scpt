@@ -16,6 +16,9 @@ global saveName
 
 global file_path
 global f
+
+--High quality recording: ".m4a"
+--Maximum quality recording: ".aiff"
 property file_extension : ".aiff"
 
 global new_audio_recording
