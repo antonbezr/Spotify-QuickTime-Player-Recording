@@ -27,6 +27,7 @@ on setup()
 	tell application "Spotify"
 		if player state is playing then pause
 		set player position to -1
+		set sound volume to 100
 		set repeating to true
 		set shuffling to false
 		set track_number to (track number of current track)
@@ -56,7 +57,6 @@ on startRec()
 		set new_audio_recording to new audio recording
 		tell new_audio_recording
 			start
-			--delay 0.1
 		end tell
 	end tell
 end startRec
