@@ -100,9 +100,13 @@ repeat while track_list does not contain track_name
 	do shell script "/usr/local/bin/SwitchAudioSource -t output -s 'Soundflower (2ch)'"
 	do shell script "osascript -e \"set volume output volume 100\""
 	
+	delay 3
+	
 	startRec()
 	songPlaying()
 	stopRec()
+	
+	delay 3
 	
 	setup()
 	
