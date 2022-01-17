@@ -19,7 +19,7 @@ global f
 
 --High quality recording: ".m4a"
 --Maximum quality recording: ".aiff"
-property file_extension : ".aiff"
+property file_extension : ".m4a"
 
 global new_audio_recording
 
@@ -53,6 +53,8 @@ end setup
 
 on startRec()
 	tell application "QuickTime Player"
+		quit
+		delay 3
 		activate
 		set new_audio_recording to new audio recording
 		tell new_audio_recording
