@@ -3,7 +3,7 @@
 This AppleScript script allows the user to record songs from Spotify on any Mac OS device using QuickTime Player.
 
 Dependencies for this script:
-* Soundflower - https://github.com/mattingalls/Soundflower
+* BlackHole - https://existential.audio/blackhole/
 * switchaudio-osx - https://github.com/deweller/switchaudio-osx
 
 Before starting script:
