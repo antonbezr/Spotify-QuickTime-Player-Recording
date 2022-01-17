@@ -96,8 +96,8 @@ repeat while track_list does not contain track_name
 	
 	delay 3
 	
-	do shell script "/usr/local/bin/SwitchAudioSource -t input -s 'Soundflower (2ch)'"
-	do shell script "/usr/local/bin/SwitchAudioSource -t output -s 'Soundflower (2ch)'"
+	do shell script "/usr/local/bin/SwitchAudioSource -t input -s 'BlackHole 2ch'"
+	do shell script "/usr/local/bin/SwitchAudioSource -t output -s 'BlackHole 2ch'"
 	do shell script "osascript -e \"set volume output volume 100\""
 	
 	delay 3
