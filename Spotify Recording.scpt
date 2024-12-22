@@ -1,28 +1,44 @@
---Records all songs from Spotify playlist/album.
---Only useful for Spotify premium users.
---Must be no duplicate songs in the playlist/album or else it will stop recording.
+property FILE_EXTENSION : ".m4a"
 
-global track_number
-global track_name
-global track_artist
-global track_album
-global track_duration
+global prevInput
+global prevOutput
 
-global track_list
-set track_list to {}
+global trackList
+set trackList to {}
 
-global saveFolder
-global saveName
-
-global file_path
+global trackName
+global trackDuration
 global f
+global quickTimeAudioRecording
 
---High quality recording: ".m4a"
---Maximum quality recording: ".aiff"
-property file_extension : ".m4a"
+----- HANDLE AUDIO I/O -----
+-- retrieveAudioSource - Retrieves and notes the audio input and output source prior to script execution
+-- setBlackHole - Sets audio input and output to BlackHole 2ch in order to record audio
+-- cleanup - Resets the audio input and output source to previous configuration
+---------------------------------
+on retrieveAudioSource()
+	set prevInput to do shell script "/opt/homebrew/bin/SwitchAudioSource -c -t input"
+	set prevOutput to do shell script "/opt/homebrew/bin/SwitchAudioSource -c -t output"
+end retrieveAudioSource
 
-global new_audio_recording
+on setBlackHole()
+	do shell script "/opt/homebrew/bin/SwitchAudioSource -t input -s 'BlackHole 2ch'"
+	do shell script "/opt/homebrew/bin/SwitchAudioSource -t output -s 'BlackHole 2ch'"
+	do shell script "osascript -e \"set volume output volume 100\""
+end setBlackHole
 
+on cleanup()
+	do shell script "/opt/homebrew/bin/SwitchAudioSource -t input -s " & quoted form of prevInput
+	do shell script "/opt/homebrew/bin/SwitchAudioSource -t output -s " & quoted form of prevOutput
+	do shell script "osascript -e \"set volume output volume 30\""
+end cleanup
+
+
+----- HANDLE SPOTIFY SETUP -----
+-- 1. Gets information for current song
+-- 2. Generates album folder for current song if does not exist
+-- 3. Sets save file path for QuickTime audio recording
+--------------------------------------
 on setup()
 	tell application "Spotify"
 		if player state is playing then pause
@@ -30,34 +46,41 @@ on setup()
 		set sound volume to 100
 		set repeating to true
 		set shuffling to false
-		set track_number to (track number of current track)
-		set track_name to (name of current track)
-		set track_name to do shell script "echo \"" & track_name & "\" | awk '{for (i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) substr($i,2)} 1'"
-		set track_artist to (artist of current track)
-		set track_album to (album of current track)
-		set track_album to do shell script "echo \"" & track_album & "\" | awk '{for (i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) substr($i,2)} 1'"
-		set track_duration to (duration of current track) * 1.0E-3
+		set trackNumber to (track number of current track)
+		set trackName to (name of current track)
+		set trackName to do shell script "echo \"" & trackName & "\" | awk '{for (i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) substr($i,2)} 1'"
+		set trackArtist to (artist of current track)
+		set trackAlbum to (album of current track)
+		set trackAlbum to do shell script "echo \"" & trackAlbum & "\" | awk '{for (i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) substr($i,2)} 1'"
+		set trackDuration to (duration of current track) * 1.0E-3
 	end tell
 	
-	set saveFolder to "[" & track_artist & "]" & " [XXXX] " & track_album & " [320 kbps]"
-	set indexed_track_number to track_number
-	if indexed_track_number < 10 then
-		set indexed_track_number to "0" & indexed_track_number
+	set saveFolder to "[" & trackArtist & "]" & " [XXXX] " & trackAlbum & " [320 kbps]"
+	set indexedTrackNumber to trackNumber
+	if indexedTrackNumber < 10 then
+		set indexedTrackNumber to "0" & indexedTrackNumber
 	end if
-	set saveName to "[" & indexed_track_number & "] " & track_name & file_extension
+	set saveName to "[" & indexedTrackNumber & "] " & trackName & FILE_EXTENSION
 	
 	do shell script "mkdir -p " & "~/Music/QuickTime/\"" & saveFolder & "\""
-	set file_path to "MAINFRAME:Users:anton:Music:QuickTime:" & saveFolder & ":" & saveName
-	set f to a reference to file file_path
+	set homeDir to do shell script "echo $HOME | sed 's/\\//:/g'"
+	set filePath to "Macintosh HD" & homeDir & ":Music:QuickTime:" & saveFolder & ":" & saveName
+	set f to a reference to file filePath
 end setup
 
+
+----- HANDLE RECORDING CONTROLS -----
+-- startRec - Start QuickTime audio recording
+-- songPlaying - Start playing Spotify song and sleep for song duration
+-- stopRec - Stop QuickTime audio recording and save file
+------------------------------------------------
 on startRec()
 	tell application "QuickTime Player"
 		quit
 		delay 3
 		activate
-		set new_audio_recording to new audio recording
-		tell new_audio_recording
+		set quickTimeAudioRecording to new audio recording
+		tell quickTimeAudioRecording
 			start
 		end tell
 	end tell
@@ -68,52 +91,43 @@ on songPlaying()
 		if player state is playing then pause
 		set player position to 0
 		play
-		delay track_duration
+		delay trackDuration
 		pause
 	end tell
 end songPlaying
 
 on stopRec()
 	tell application "QuickTime Player"
-		tell new_audio_recording
+		tell quickTimeAudioRecording
 			pause
-			save new_audio_recording in f
+			save quickTimeAudioRecording in f
 			stop
-			close new_audio_recording
+			close quickTimeAudioRecording
 		end tell
 	end tell
 end stopRec
 
----------- MAIN LOOP ----------
 
-setup()
-
-repeat while track_list does not contain track_name
+--- ================== ----
+---------- MAIN EXECUTION ----------
+--- ================== ----
+try
+	retrieveAudioSource()
+	setBlackHole()
 	
-	copy track_name to end of track_list
+	repeat while true
+		setup()
+		if trackList contains trackName then break
+		copy trackName to end of trackList
+		
+		startRec()
+		songPlaying()
+		stopRec()
+		
+		delay 2 -- Ensure Spotify starts playing next song
+	end repeat
 	
-	do shell script "/usr/local/bin/SwitchAudioSource -t input -s 'Built-in Microphone'"
-	do shell script "/usr/local/bin/SwitchAudioSource -t output -s 'Built-in Output'"
-	do shell script "osascript -e \"set volume output volume 30\""
-	
-	delay 3
-	
-	do shell script "/usr/local/bin/SwitchAudioSource -t input -s 'BlackHole 2ch'"
-	do shell script "/usr/local/bin/SwitchAudioSource -t output -s 'BlackHole 2ch'"
-	do shell script "osascript -e \"set volume output volume 100\""
-	
-	delay 3
-	
-	startRec()
-	songPlaying()
-	stopRec()
-	
-	delay 3
-	
-	setup()
-	
-end repeat
-
-do shell script "/usr/local/bin/SwitchAudioSource -t input -s 'Built-in Microphone'"
-do shell script "/usr/local/bin/SwitchAudioSource -t output -s 'Built-in Output'"
-do shell script "osascript -e \"set volume output volume 30\""
+	cleanup()
+on error errMsg number errNum
+	cleanup()
+end try
