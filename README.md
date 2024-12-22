@@ -8,7 +8,7 @@ Dependencies for this script:
 
 Before starting script:
 * Make sure Spotify is playing from album/playlist you wish to download.
-* Ensure your album/playlist does not have duplicate song names, otherwise the script will exit prematurely.
+* Ensure your album/playlist does not have duplicate tracks, otherwise the script will exit prematurely.
 
 The script is able to capture audio quality in Stereo 320 kbps (CBR) MP3 format, as can be seen in the spectral below. MP3 320kbps has a frequency cut-off at 20.5 kHz which is consistent with the spectral.
 
