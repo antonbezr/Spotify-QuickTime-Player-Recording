@@ -12,11 +12,11 @@ global trackIdentifier
 global f
 global quickTimeAudioRecording
 
------ HANDLE AUDIO I/O -----
+-------- HANDLE AUDIO I/O --------
 -- retrieveAudioSource - Retrieves and notes the audio input and output source prior to script execution
 -- setBlackHole - Sets audio input and output to BlackHole 2ch in order to record audio
 -- cleanup - Resets the audio input and output source to previous configuration
----------------------------------
+----------------------------------
 on retrieveAudioSource()
 	set prevInput to do shell script "/opt/homebrew/bin/SwitchAudioSource -c -t input"
 	set prevOutput to do shell script "/opt/homebrew/bin/SwitchAudioSource -c -t output"
@@ -39,7 +39,7 @@ end cleanup
 -- 1. Gets information for current song
 -- 2. Generates album folder for current song if does not exist
 -- 3. Sets save file path for QuickTime audio recording
---------------------------------------
+--------------------------------
 on setup()
 	tell application "Spotify"
 		if player state is playing then pause
@@ -77,7 +77,7 @@ end setup
 -- startRec - Start QuickTime audio recording
 -- songPlaying - Start playing Spotify song and sleep for song duration
 -- stopRec - Stop QuickTime audio recording and save file
-------------------------------------------------
+-------------------------------------
 on startRec()
 	tell application "QuickTime Player"
 		quit
@@ -112,9 +112,9 @@ on stopRec()
 end stopRec
 
 
---- ================== ----
+--- =========================== ----
 ---------- MAIN EXECUTION ----------
---- ================== ----
+--- =========================== ----
 try
 	retrieveAudioSource()
 	setBlackHole()
