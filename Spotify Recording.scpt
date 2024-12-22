@@ -28,9 +28,9 @@ on setBlackHole()
 end setBlackHole
 
 on cleanup()
+	do shell script "osascript -e \"set volume output volume 30\""
 	do shell script "/opt/homebrew/bin/SwitchAudioSource -t input -s " & quoted form of prevInput
 	do shell script "/opt/homebrew/bin/SwitchAudioSource -t output -s " & quoted form of prevOutput
-	do shell script "osascript -e \"set volume output volume 30\""
 end cleanup
 
 
@@ -46,13 +46,15 @@ on setup()
 		set sound volume to 100
 		set repeating to true
 		set shuffling to false
+		
 		set trackNumber to (track number of current track)
 		set trackName to (name of current track)
-		set trackName to do shell script "echo \"" & trackName & "\" | awk '{for (i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) substr($i,2)} 1'"
+		set trackName to do shell script "echo '" & trackName & "' | awk '{for (i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) substr($i,2)} 1' | sed 's/[$*?&#!\\\\\"'\\\"'|:/]/_/g'"
 		set trackArtist to (artist of current track)
+		set trackArtist to do shell script "echo '" & trackArtist & "' | sed 's/[$*?&#!\\\\\"'\\\"'|:/]/_/g'"
 		set trackAlbum to (album of current track)
-		set trackAlbum to do shell script "echo \"" & trackAlbum & "\" | awk '{for (i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) substr($i,2)} 1'"
-		set trackDuration to (duration of current track) * 1.0E-3
+		set trackAlbum to do shell script "echo '" & trackAlbum & "' | awk '{for (i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) substr($i,2)} 1' | sed 's/[$*?&#!\\\\\"'\\\"'|:/]/_/g'"
+		set trackDuration to (duration of current track) * 1.0E-3 -- This is done because duration provided by Spotify does not match actual audio length
 	end tell
 	
 	set saveFolder to "[" & trackArtist & "]" & " [XXXX] " & trackAlbum & " [320 kbps]"
