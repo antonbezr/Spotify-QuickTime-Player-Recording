@@ -8,6 +8,7 @@ set trackList to {}
 
 global trackName
 global trackDuration
+global trackIdentifier
 global f
 global quickTimeAudioRecording
 
@@ -55,6 +56,7 @@ on setup()
 		set trackAlbum to (album of current track)
 		set trackAlbum to do shell script "echo '" & trackAlbum & "' | awk '{for (i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) substr($i,2)} 1' | sed 's/[$*?&#!\\\\\"'\\\"'|:/]/_/g'"
 		set trackDuration to (duration of current track) * 1.0E-3 -- This is done because duration provided by Spotify does not match actual audio length
+		set trackIdentifier to (trackArtist & " - " & trackName)
 	end tell
 	
 	set saveFolder to "[" & trackArtist & "]" & " [XXXX] " & trackAlbum & " [320 kbps]"
@@ -119,8 +121,8 @@ try
 	
 	repeat while true
 		setup()
-		if trackList contains trackName then break
-		copy trackName to end of trackList
+		if trackList contains trackIdentifier then break
+		copy trackIdentifier to end of trackList
 		
 		startRec()
 		songPlaying()
