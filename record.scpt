@@ -61,7 +61,7 @@ on setup()
 	end if
 	set saveName to "[" & indexedTrackNumber & "] " & trackName & FILE_EXTENSION
 	
-	do shell script "mkdir -p " & "~/Music/QuickTime/'" & saveFolder & "'"
+	do shell script "mkdir -p " & "~/Music/QuickTime/" & quoted form of saveFolder
 	set homeDir to do shell script "echo $HOME | sed 's/\\//:/g'"
 	set filePath to "Macintosh HD" & homeDir & ":Music:QuickTime:" & saveFolder & ":" & saveName
 	set f to a reference to file filePath
